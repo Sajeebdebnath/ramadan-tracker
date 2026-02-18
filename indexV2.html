@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="bn" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>রমজান ২০২৬</title>
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            /* Color Palette based on HangryDev (Dark Mode) */
+            --background: #0a0a0a;
+            --surface: #121212;
+            --surface-border: #262626;
+            --primary: #fafafa;
+            --secondary: #a1a1aa;
+            /* Zinc 400 */
+            --accent-green: #10b981;
+            /* Emerald 500 */
+            --accent-green-dim: rgba(16, 185, 129, 0.1);
+            --accent-gold: #fbbf24;
+            /* Amber 400 */
+            --accent-gold-dim: rgba(251, 191, 36, 0.1);
+
+            --font-sans: 'Hind Siliguri', 'Instrument Sans', sans-serif;
+            --font-serif: 'Tiro Bangla', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--background);
+            color: var(--primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Subtle Background Pattern */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        #app {
+            width: 100%;
+            max-width: 500px;
+            padding: 1.5rem;
+        }
+
+        /* Card Container */
+        .card {
+            background-color: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 2.5rem;
+        }
+
+        .title {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #fff, #a1a1aa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--secondary);
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 1rem;
+            background: var(--surface-border);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 9999px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            color: var(--primary);
+        }
+
+        .badge.active {
+            background: var(--accent-green-dim);
+            color: var(--accent-green);
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+
+        /* Countdown */
+        .countdown {
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .timer-label {
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+            font-family: var(--font-sans);
+        }
+
+        .timer {
+            font-size: 4.5rem;
+            font-weight: 600;
+            line-height: 1;
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+
+        .next-event-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+            color: var(--secondary);
+            margin-top: 1rem;
+        }
+
+        .next-event-pill span {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Dua Section - Minimalist */
+        .dua-container {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--surface-border);
+            text-align: center;
+        }
+
+        .dua-bangla {
+            font-family: var(--font-serif);
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .dua-mean {
+            font-size: 0.95rem;
+            color: var(--secondary);
+            font-style: italic;
+        }
+
+        /* Controls */
+        .controls {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid var(--surface-border);
+            color: var(--secondary);
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-sans);
+        }
+
+        .btn:hover {
+            background: var(--surface-border);
+            color: var(--primary);
+            border-color: #404040;
+        }
+
+        /* Table */
+        .schedule-drawer {
+            margin-top: 2rem;
+            background: #0f0f0f;
+            border: 1px solid var(--surface-border);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease-in-out;
+            opacity: 0;
+        }
+
+        .schedule-drawer.open {
+            max-height: 400px;
+            opacity: 1;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        th {
+            background: #171717;
+            padding: 0.75rem 1rem;
+            color: var(--secondary);
+            font-weight: 500;
+            position: sticky;
+            top: 0;
+            border-bottom: 1px solid var(--surface-border);
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            color: var(--secondary);
+        }
+
+        tr.active {
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        tr.active td {
+            color: var(--accent-green);
+        }
+
+        /* Lucide Icons sizing */
+        .icon {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 2rem;
+            }
+
+            .timer {
+                font-size: 3.5rem;
+            }
+
+            #app {
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="app">
+        <div class="card">
+            <!-- Header -->
+            <div class="header">
+                <h1 class="title">রমজান ২০২৬</h1>
+                <div class="subtitle">
+                    <i data-lucide="calendar" class="icon"></i> {{ currentDateDisplay }}
+                </div>
+            </div>
+
+            <!-- Dynamic Badge -->
+            <div class="badge" :class="{ active: ramadanDay > 0 }">
+                <i v-if="ramadanDay > 0" data-lucide="moon" class="icon"></i>
+                <span v-if="ramadanDay > 0">{{ toBanglaNum(ramadanDay) }} রমজান</span>
+                <span v-else>{{ currentStateLabel }}</span>
+            </div>
+
+            <!-- Timer -->
+            <div class="countdown">
+                <div class="timer-label">{{ statusText }}</div>
+                <div class="timer">{{ toBanglaTime(timeLeft) }}</div>
+                <div class="next-event-pill">
+                    <i data-lucide="clock" class="icon"></i>
+                    {{ nextEventLabel }}: <span>{{ toBanglaTime(formatTime12(nextEventTime)) }}</span>
+                </div>
+            </div>
+
+            <!-- Dua -->
+            <div class="dua-container">
+                <span class="timer-label" style="display:block; margin-bottom:1rem;">{{ currentDuaTitle }}</span>
+                <!-- Bangla Pronunciation instead of Arabic Script -->
+                <div class="dua-bangla">{{ currentDua.bangla }}</div>
+                <div class="dua-mean">"{{ currentDua.meaning }}"</div>
+            </div>
+
+            <!-- Action -->
+            <div class="controls">
+                <button @click="toggleSchedule" class="btn">
+                    <i data-lucide="table" class="icon"></i> {{ showSchedule ? 'লুকান' : 'সম্পূর্ণ সময়সূচী' }}
+                </button>
+            </div>
+
+            <!-- Schedule -->
+            <div class="schedule-drawer" :class="{ open: showSchedule }">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>রমজান</th>
+                            <th>তারিখ</th>
+                            <th>বার</th>
+                            <th>সেহরি</th>
+                            <th>ইফতার</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="day in schedule" :key="day.ramadan" :class="{ active: day.ramadan === ramadanDay }">
+                            <td style="font-weight: 600; font-family: var(--font-serif);">{{ toBanglaNum(day.ramadan) }}
+                            </td>
+                            <td>{{ day.banglaDate }}</td>
+                            <td>{{ day.banglaDay }}</td>
+                            <td>{{ toBanglaTime(formatTime12(day.sehri)) }}</td>
+                            <td>{{ toBanglaTime(formatTime12(day.iftar)) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref, computed, onMounted, nextTick } = Vue;
+
+        createApp({
+            setup() {
+                // Include lucide icons
+                onMounted(() => {
+                    if (window.lucide) lucide.createIcons();
+                });
+
+                const scheduleData = [
+                    { ramadan: 1, date: "19 Feb", fullDate: "2026-02-19", day: "Thu", sehri: "05:12", iftar: "17:58", banglaDate: "১৯ ফেব্রুয়ারি", banglaDay: "বৃহস্পতি" },
+                    { ramadan: 2, date: "20 Feb", fullDate: "2026-02-20", day: "Fri", sehri: "05:11", iftar: "17:58", banglaDate: "২০ ফেব্রুয়ারি", banglaDay: "শুক্র" },
+                    { ramadan: 3, date: "21 Feb", fullDate: "2026-02-21", day: "Sat", sehri: "05:11", iftar: "17:59", banglaDate: "২১ ফেব্রুয়ারি", banglaDay: "শনি" },
+                    { ramadan: 4, date: "22 Feb", fullDate: "2026-02-22", day: "Sun", sehri: "05:10", iftar: "17:59", banglaDate: "২২ ফেব্রুয়ারি", banglaDay: "রবি" },
+                    { ramadan: 5, date: "23 Feb", fullDate: "2026-02-23", day: "Mon", sehri: "05:09", iftar: "18:00", banglaDate: "২৩ ফেব্রুয়ারি", banglaDay: "সোম" },
+                    { ramadan: 6, date: "24 Feb", fullDate: "2026-02-24", day: "Tue", sehri: "05:08", iftar: "18:00", banglaDate: "২৪ ফেব্রুয়ারি", banglaDay: "মঙ্গল" },
+                    { ramadan: 7, date: "25 Feb", fullDate: "2026-02-25", day: "Wed", sehri: "05:08", iftar: "18:01", banglaDate: "২৫ ফেব্রুয়ারি", banglaDay: "বুধ" },
+                    { ramadan: 8, date: "26 Feb", fullDate: "2026-02-26", day: "Thu", sehri: "05:07", iftar: "18:01", banglaDate: "২৬ ফেব্রুয়ারি", banglaDay: "বৃহস্পতি" },
+                    { ramadan: 9, date: "27 Feb", fullDate: "2026-02-27", day: "Fri", sehri: "05:06", iftar: "18:02", banglaDate: "২৭ ফেব্রুয়ারি", banglaDay: "শুক্র" },
+                    { ramadan: 10, date: "28 Feb", fullDate: "2026-02-28", day: "Sat", sehri: "05:05", iftar: "18:02", banglaDate: "২৮ ফেব্রুয়ারি", banglaDay: "শনি" },
+                    { ramadan: 11, date: "01 Mar", fullDate: "2026-03-01", day: "Sun", sehri: "05:04", iftar: "18:03", banglaDate: "১ মার্চ", banglaDay: "রবি" },
+                    { ramadan: 12, date: "02 Mar", fullDate: "2026-03-02", day: "Mon", sehri: "05:04", iftar: "18:03", banglaDate: "২ মার্চ", banglaDay: "সোম" },
+                    { ramadan: 13, date: "03 Mar", fullDate: "2026-03-03", day: "Tue", sehri: "05:03", iftar: "18:04", banglaDate: "৩ মার্চ", banglaDay: "মঙ্গল" },
+                    { ramadan: 14, date: "04 Mar", fullDate: "2026-03-04", day: "Wed", sehri: "05:02", iftar: "18:04", banglaDate: "৪ মার্চ", banglaDay: "বুধ" },
+                    { ramadan: 15, date: "05 Mar", fullDate: "2026-03-05", day: "Thu", sehri: "05:01", iftar: "18:05", banglaDate: "৫ মার্চ", banglaDay: "বৃহস্পতি" },
+                    { ramadan: 16, date: "06 Mar", fullDate: "2026-03-06", day: "Fri", sehri: "05:00", iftar: "18:05", banglaDate: "৬ মার্চ", banglaDay: "শুক্র" },
+                    { ramadan: 17, date: "07 Mar", fullDate: "2026-03-07", day: "Sat", sehri: "04:59", iftar: "18:06", banglaDate: "৭ মার্চ", banglaDay: "শনি" },
+                    { ramadan: 18, date: "08 Mar", fullDate: "2026-03-08", day: "Sun", sehri: "04:58", iftar: "18:06", banglaDate: "৮ মার্চ", banglaDay: "রবি" },
+                    { ramadan: 19, date: "09 Mar", fullDate: "2026-03-09", day: "Mon", sehri: "04:57", iftar: "18:07", banglaDate: "৯ মার্চ", banglaDay: "সোম" },
+                    { ramadan: 20, date: "10 Mar", fullDate: "2026-03-10", day: "Tue", sehri: "04:57", iftar: "18:07", banglaDate: "১০ মার্চ", banglaDay: "মঙ্গল" },
+                    { ramadan: 21, date: "11 Mar", fullDate: "2026-03-11", day: "Wed", sehri: "04:56", iftar: "18:07", banglaDate: "১১ মার্চ", banglaDay: "বুধ" },
+                    { ramadan: 22, date: "12 Mar", fullDate: "2026-03-12", day: "Thu", sehri: "04:55", iftar: "18:08", banglaDate: "১২ মার্চ", banglaDay: "বৃহস্পতি" },
+                    { ramadan: 23, date: "13 Mar", fullDate: "2026-03-13", day: "Fri", sehri: "04:54", iftar: "18:08", banglaDate: "১৩ মার্চ", banglaDay: "শুক্র" },
+                    { ramadan: 24, date: "14 Mar", fullDate: "2026-03-14", day: "Sat", sehri: "04:53", iftar: "18:09", banglaDate: "১৪ মার্চ", banglaDay: "শনি" },
+                    { ramadan: 25, date: "15 Mar", fullDate: "2026-03-15", day: "Sun", sehri: "04:52", iftar: "18:09", banglaDate: "১৫ মার্চ", banglaDay: "রবি" },
+                    { ramadan: 26, date: "16 Mar", fullDate: "2026-03-16", day: "Mon", sehri: "04:51", iftar: "18:10", banglaDate: "১৬ মার্চ", banglaDay: "সোম" },
+                    { ramadan: 27, date: "17 Mar", fullDate: "2026-03-17", day: "Tue", sehri: "04:50", iftar: "18:10", banglaDate: "১৭ মার্চ", banglaDay: "মঙ্গল" },
+                    { ramadan: 28, date: "18 Mar", fullDate: "2026-03-18", day: "Wed", sehri: "04:49", iftar: "18:10", banglaDate: "১৮ মার্চ", banglaDay: "বুধ" },
+                    { ramadan: 29, date: "19 Mar", fullDate: "2026-03-19", day: "Thu", sehri: "04:48", iftar: "18:11", banglaDate: "১৯ মার্চ", banglaDay: "বৃহস্পতি" },
+                    { ramadan: 30, date: "20 Mar", fullDate: "2026-03-20", day: "Fri", sehri: "04:47", iftar: "18:11", banglaDate: "২০ মার্চ", banglaDay: "শুক্র" }
+                ];
+
+                const duas = {
+                    sehri: {
+                        bangla: "নাওয়াইতু আন আছুম্মা গাদাম মিন শাহরি রমাজানাল মুবারাকি ফারদাল্লাকা ইয়া আল্লাহু ফাতাকাব্বাল মিন্নি ইন্নাকা আনতাস সামিউল আলিম।",
+                        meaning: "হে আল্লাহ! আমি আগামীকাল পবিত্র রমজানের তোমার দেওয়া ফরজ রোজা রাখার নিয়ত করলাম। অতএব তুমি আমার পক্ষ থেকে তা কবুল কর, নিশ্চয়ই তুমি সর্বশ্রোতা ও সর্বজ্ঞানী।",
+                        title: "সেহরির দোয়া (নিয়ত)"
+                    },
+                    iftar: {
+                        bangla: "আল্লাহুম্মা লাকা ছুমতু ওয়া আলা রিযক্বিকা আফতারতু।",
+                        meaning: "হে আল্লাহ! আমি তোমারই সন্তুষ্টির জন্য রোজা রেখেছি এবং তোমারই দেয়া রিযিক দ্বারা ইফতার করছি।",
+                        title: "ইফতারের দোয়া"
+                    }
+                };
+
+                const now = ref(new Date());
+                const schedule = ref(scheduleData);
+                const showSchedule = ref(false);
+
+                onMounted(() => {
+                    setInterval(() => {
+                        now.value = new Date();
+                    }, 1000);
+                });
+
+                // Helper to convert English digits to Bangla
+                const toBanglaNum = (num) => {
+                    if (!num) return "";
+                    const banglaDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+                    return num.toString().split('').map(c =>
+                        /[0-9]/.test(c) ? banglaDigits[parseInt(c)] : c
+                    ).join('');
+                };
+
+                const toBanglaTime = (timeStr) => {
+                    let formatted = toBanglaNum(timeStr);
+                    formatted = formatted.replace('AM', 'ভোর');
+                    formatted = formatted.replace('PM', 'সন্ধ্যা'); // Simplified, better logic needed for AM/PM context if simple replacement
+
+                    // Better Bangla AM/PM logic
+                    if (timeStr.includes('AM')) {
+                        return formatted.replace('AM', '') + ' (ভোর)';
+                    } else if (timeStr.includes('PM')) {
+                        return formatted.replace('PM', '') + ' (সন্ধ্যা)';
+                    }
+                    return formatted;
+                };
+
+                const currentDateDisplay = computed(() => {
+                    // Manual formatting for Bangla Date
+                    const days = ['রবিবার', 'সোমবার', 'মঙ্গলবার', 'বুধবার', 'বৃহস্পতিবার', 'শুক্রবার', 'শনিবার'];
+                    const months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'];
+
+                    const d = now.value;
+                    const dayName = days[d.getDay()];
+                    const dateNum = toBanglaNum(d.getDate());
+                    const monthName = months[d.getMonth()];
+                    const yearNum = toBanglaNum(d.getFullYear());
+
+                    return `${dayName}, ${dateNum} ${monthName} ${yearNum}`;
+                });
+
+                const currentDaySchedule = computed(() => {
+                    const todayStr = now.value.toISOString().split('T')[0];
+                    return schedule.value.find(s => s.fullDate === todayStr) || null;
+                });
+
+                const nextDaySchedule = computed(() => {
+                    const tomorrow = new Date(now.value);
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    const tmrwStr = tomorrow.toISOString().split('T')[0];
+                    return schedule.value.find(s => s.fullDate === tmrwStr) || null;
+                });
+
+                const getEventTime = (dateStr, timeStr) => {
+                    return new Date(`${dateStr}T${timeStr}:00`);
+                };
+
+                const computedState = computed(() => {
+                    if (!currentDaySchedule.value) {
+                        const firstDay = schedule.value[0];
+                        const lastDay = schedule.value[schedule.value.length - 1];
+                        const firstDate = new Date(`${firstDay.fullDate}T00:00:00`);
+                        const lastDate = new Date(`${lastDay.fullDate}T23:59:59`);
+
+                        if (now.value < firstDate) return { type: 'pre_ramadan', target: firstDate };
+                        if (now.value > lastDate) return { type: 'eid', target: null };
+
+                        return { type: 'unknown', target: null };
+                    }
+
+                    const today = currentDaySchedule.value;
+                    const sehriTime = getEventTime(today.fullDate, today.sehri);
+                    const iftarTime = getEventTime(today.fullDate, today.iftar);
+
+                    if (now.value < sehriTime) {
+                        return { type: 'sehri', target: sehriTime, label: 'সেহরির শেষ হতে বাকি' };
+                    }
+
+                    if (now.value >= sehriTime && now.value < iftarTime) {
+                        return { type: 'iftar', target: iftarTime, label: 'ইফতারের বাকি' };
+                    }
+
+                    if (now.value >= iftarTime) {
+                        if (nextDaySchedule.value) {
+                            const nextSehri = getEventTime(nextDaySchedule.value.fullDate, nextDaySchedule.value.sehri);
+                            return { type: 'next_sehri', target: nextSehri, label: 'সেহরির শেষ হতে বাকি' };
+                        } else {
+                            return { type: 'eid', target: null };
+                        }
+                    }
+
+                    return { type: 'unknown' };
+                });
+
+                const timeLeft = computed(() => {
+                    if (!computedState.value.target) return "00:00:00";
+
+                    const diff = computedState.value.target - now.value;
+                    if (diff < 0) return "00:00:00";
+
+                    const h = Math.floor(diff / (1000 * 60 * 60));
+                    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+                    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                });
+
+                const ramadanDay = computed(() => {
+                    if (currentDaySchedule.value) return currentDaySchedule.value.ramadan;
+                    if (computedState.value.type === 'next_sehri' && nextDaySchedule.value) {
+                        return nextDaySchedule.value.ramadan;
+                    }
+                    return 0;
+                });
+
+                const currentStateLabel = computed(() => {
+                    if (computedState.value.type === 'pre_ramadan') return 'শিঘ্রই আসছে';
+                    if (computedState.value.type === 'eid') return 'ঈদ মোবারক';
+                    return 'রমজান';
+                });
+
+                const statusText = computed(() => {
+                    const map = {
+                        'pre_ramadan': 'রমজান শুরু হতে বাকি',
+                        'sehri': 'সেহরির শেষ সময় বাকি',
+                        'iftar': 'ইফতারের সময় বাকি',
+                        'next_sehri': 'সেহরির শেষ সময় বাকি (আগামীকাল)',
+                        'eid': 'ঈদ মোবারক',
+                        'unknown': 'লোড হচ্ছে...'
+                    };
+                    return map[computedState.value.type];
+                });
+
+                const nextEventTime = computed(() => {
+                    if (computedState.value.target) {
+                        const d = computedState.value.target;
+                        return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+                    }
+                    return "--:--";
+                });
+
+                const nextEventLabel = computed(() => computedState.value.label || 'সময়');
+
+                const currentDua = computed(() => {
+                    if (computedState.value.type === 'sehri' || computedState.value.type === 'next_sehri') {
+                        return duas.sehri;
+                    }
+                    return duas.iftar;
+                });
+
+                const currentDuaTitle = computed(() => {
+                    if (computedState.value.type === 'sehri' || computedState.value.type === 'next_sehri') {
+                        return duas.sehri.title;
+                    }
+                    return duas.iftar.title;
+                });
+
+                const formatTime12 = (time24) => {
+                    if (!time24) return "";
+                    let [h, m] = time24.split(':');
+                    h = parseInt(h);
+                    const ampm = h >= 12 ? 'PM' : 'AM';
+                    h = h % 12;
+                    h = h ? h : 12;
+                    return `${h}:${m} ${ampm}`;
+                };
+
+                const toggleSchedule = () => {
+                    showSchedule.value = !showSchedule.value;
+                    nextTick(() => {
+                        if (window.lucide) lucide.createIcons();
+                    });
+                };
+
+                return {
+                    now,
+                    schedule,
+                    showSchedule,
+                    toggleSchedule,
+                    currentDateDisplay,
+                    ramadanDay,
+                    timeLeft,
+                    statusText,
+                    currentStateLabel,
+                    nextEventTime,
+                    nextEventLabel,
+                    currentDua,
+                    currentDuaTitle,
+                    formatTime12,
+                    toBanglaNum,
+                    toBanglaTime,
+                    computedState
+                };
+            }
+        }).mount('#app');
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="bn" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>রমজান ২০২৬</title>
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div id="app">
+        <div class="dashboard-card">
+
+            <!-- Hero Banner: Green Card Top -->
+            <div class="hero-banner">
+                <div class="hero-title">রমজান মোবারক</div>
+                <div class="hero-date">{{ currentDateDisplay }}</div>
+                <div
+                    style="margin-top: 10px; font-size: 0.9rem; background: rgba(0,0,0,0.2); display: inline-block; padding: 4px 12px; border-radius: 20px;">
+                    <span v-if="ramadanDay > 0">{{ toBanglaNum(ramadanDay) }} রমজান</span>
+                    <span v-else>{{ currentStateLabel }}</span>
+                </div>
+            </div>
+
+            <!-- Timer Card -->
+            <div class="stat-card">
+                <div class="timer-label-small">
+                    <i data-lucide="timer" class="icon"></i>
+                    {{ statusText }}
+                </div>
+                <div class="timer-big">
+                    {{ toBanglaTime(timeLeft) }}
+                </div>
+                <div class="next-event-row">
+                    <div>পরবর্তী ওয়াক্ত</div>
+                    <div>{{ nextEventLabel }}: <span>{{ toBanglaTime(formatTime12(nextEventTime)) }}</span></div>
+                </div>
+            </div>
+
+            <!-- Dua Card -->
+            <div class="dua-card">
+                <div class="dua-header">
+                    <i data-lucide="book-open" class="icon"></i>
+                    {{ currentDuaTitle }}
+                </div>
+                <div class="dua-text">
+                    {{ currentDua.bangla }}
+                </div>
+                <div class="dua-meaning">
+                    "{{ currentDua.meaning }}"
+                </div>
+            </div>
+
+            <!-- Schedule Toggle -->
+            <button @click="toggleSchedule" class="action-btn" :class="{ active: showSchedule }">
+                <i data-lucide="calendar-days" class="icon"></i>
+                {{ showSchedule ? 'সময়সূচী লুকান' : 'সম্পূর্ণ সময়সূচী দেখুন' }}
+            </button>
+
+            <!-- Schedule List -->
+            <div class="schedule-container" :class="{ show: showSchedule }">
+                <div class="schedule-row schedule-head">
+                    <div>দিন</div>
+                    <div>তারিখ</div>
+                    <div>সেহরি</div>
+                    <div>ইফতার</div>
+                </div>
+                <div v-for="day in schedule" :key="day.ramadan" class="schedule-row"
+                    :class="{ 'current-day': day.ramadan === ramadanDay }">
+                    <div>{{ toBanglaNum(day.ramadan) }}</div>
+                    <div>{{ day.banglaDate }}</div>
+                    <div>{{ toBanglaTime(formatTime12(day.sehri)) }}</div>
+                    <div>{{ toBanglaTime(formatTime12(day.iftar)) }}</div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                &copy; ২০২৬ ডিজাইন ও ডেভেলপমেন্ট: <a href="https://www.facebook.com/sajeebdebnath.cse/"
+                    target="_blank">Sajeeb Debnath</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>
