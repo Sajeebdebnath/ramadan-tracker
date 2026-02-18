@@ -92,6 +92,13 @@ body {
     gap: 1rem;
 }
 
+.hero-location {
+    font-size: 0.9rem;
+    opacity: 0.85;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
 .stat-card {
     background-color: #000000; /* Darker than card */
     border: 1px solid var(--border);
