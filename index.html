@@ -48,6 +48,10 @@
                     <div>পরবর্তী ওয়াক্ত</div>
                     <div>{{ nextEventLabel }}: <span>{{ toBanglaTime(formatTime12(nextEventTime)) }}</span></div>
                 </div>
+                <div class="next-event-row" v-if="currentDayDuration">
+                    <div>আজকের রোজা</div>
+                    <div><span>{{ currentDayDuration }}</span></div>
+                </div>
             </div>
 
             <!-- Dua Card -->
@@ -77,6 +81,7 @@
                     <div>তারিখ</div>
                     <div>সেহরি</div>
                     <div>ইফতার</div>
+                    <div>সময়</div>
                 </div>
                 <div v-for="day in schedule" :key="day.ramadan" class="schedule-row"
                     :class="{ 'current-day': day.ramadan === ramadanDay }">
@@ -84,13 +89,14 @@
                     <div>{{ day.banglaDate }}</div>
                     <div>{{ toBanglaTime(formatTime12(day.sehri)) }}</div>
                     <div>{{ toBanglaTime(formatTime12(day.iftar)) }}</div>
+                    <div>{{ day.duration }}</div>
                 </div>
             </div>
 
             <!-- Footer -->
             <div class="footer">
-                &copy; ২০২৬ ডিজাইন ও ডেভেলপমেন্ট: <a href="https://www.facebook.com/sajeebdebnath.cse/"
-                    target="_blank">Sajeeb Debnath</a>
+                &copy; ২০২৬ ডিজাইন ও ডেভেলপমেন্ট: <a href="https://www.facebook.com/sajeebdebnath.cse/" target="_blank"
+                    style="color: var(--primary);">Sajeeb Debnath</a>
             </div>
 
         </div>

@@ -10,8 +10,37 @@ createApp({
         const scheduleData = window.scheduleData || [];
         const duas = window.duas || {};
 
+        const toBanglaNum = (num) => {
+            if (!num && num !== 0) return "";
+            const banglaDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+            return num.toString().split('').map(c =>
+                /[0-9]/.test(c) ? banglaDigits[parseInt(c)] : c
+            ).join('');
+        };
+
+         const calculateDuration = (sehri, iftar) => {
+            if (!sehri || !iftar) return "";
+            let [sH, sM] = sehri.split(':').map(Number);
+            let [iH, iM] = iftar.split(':').map(Number);
+
+            let diffM = iM - sM;
+            let diffH = iH - sH;
+
+            if (diffM < 0) {
+                diffM += 60;
+                diffH -= 1;
+            }
+
+            return `${toBanglaNum(diffH)} ঘণ্টা ${toBanglaNum(diffM)} মিনিট`;
+        };
+
+        const processedSchedule = scheduleData.map(day => ({
+            ...day,
+            duration: calculateDuration(day.sehri, day.iftar)
+        }));
+
         const now = ref(new Date());
-        const schedule = ref(scheduleData);
+        const schedule = ref(processedSchedule);
         const showSchedule = ref(false);
 
         onMounted(() => {
@@ -19,14 +48,6 @@ createApp({
                 now.value = new Date();
             }, 1000);
         });
-
-        const toBanglaNum = (num) => {
-            if (!num) return "";
-            const banglaDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-            return num.toString().split('').map(c =>
-                /[0-9]/.test(c) ? banglaDigits[parseInt(c)] : c
-            ).join('');
-        };
 
         const toBanglaTime = (timeStr) => {
             let formatted = toBanglaNum(timeStr);
@@ -37,6 +58,7 @@ createApp({
             }
             return formatted;
         };
+
 
         const currentDateDisplay = computed(() => {
             const days = ['রবিবার', 'সোমবার', 'মঙ্গলবার', 'বুধবার', 'বৃহস্পতিবার', 'শুক্রবার', 'শনিবার'];
@@ -180,6 +202,13 @@ createApp({
             return `${h}:${m} ${ampm}`;
         };
 
+        const currentDayDuration = computed(() => {
+            if (currentDaySchedule.value) {
+                return currentDaySchedule.value.duration;
+            }
+            return "";
+        });
+
         const toggleSchedule = () => {
             showSchedule.value = !showSchedule.value;
             nextTick(() => {
@@ -194,6 +223,7 @@ createApp({
             toggleSchedule,
             currentDateDisplay,
             ramadanDay,
+            currentDayDuration,
             timeLeft,
             statusText,
             currentStateLabel,
