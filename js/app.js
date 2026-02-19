@@ -1,9 +1,66 @@
-const { createApp, ref, computed, onMounted, nextTick } = Vue;
+const { createApp, ref, computed, onMounted, nextTick, watch } = Vue;
+
+
+
+const LucideIcon = {
+    props: {
+        name: String,
+        class: String
+    },
+    setup(props) {
+        const container = ref(null);
+
+        const renderIcon = () => {
+            if (!container.value || !window.lucide) return;
+            const className = props.class || '';
+            container.value.innerHTML = `<i data-lucide="${props.name}" class="${className}"></i>`;
+
+            window.lucide.createIcons({
+                root: container.value,
+                icons: window.lucide.icons || window.lucide
+            });
+        };
+
+        watch(() => props.name, () => nextTick(renderIcon));
+        onMounted(() => nextTick(renderIcon));
+        
+        return { container };
+    },
+    template: `<span ref="container" style="display: contents;"></span>`
+};
 
 createApp({
+    components: {
+        LucideIcon
+    },
     setup() {
+        // Theme State
+        const isDark = ref(true);
+
+        const updateTheme = () => {
+            if (isDark.value) {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            }
+        };
+
+        const toggleTheme = () => {
+            isDark.value = !isDark.value;
+            updateTheme();
+        };
+
         onMounted(() => {
-            if (window.lucide) lucide.createIcons();
+            // Theme Initialization
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                isDark.value = savedTheme === 'dark';
+            } else {
+                isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            }
+            updateTheme();
         });
 
         // Data is loaded from data.js via window object
@@ -110,17 +167,17 @@ createApp({
             const iftarTime = getEventTime(today.fullDate, today.iftar);
 
             if (now.value < sehriTime) {
-                return { type: 'sehri', target: sehriTime, label: 'সেহরির শেষ হতে বাকি' };
+                return { type: 'sehri', target: sehriTime, label: 'সেহরির সময় ' };
             }
 
             if (now.value >= sehriTime && now.value < iftarTime) {
-                return { type: 'iftar', target: iftarTime, label: 'ইফতারের বাকি' };
+                return { type: 'iftar', target: iftarTime, label: 'ইফতারের সময় ' };
             }
 
             if (now.value >= iftarTime) {
                 if (nextDaySchedule.value) {
                     const nextSehri = getEventTime(nextDaySchedule.value.fullDate, nextDaySchedule.value.sehri);
-                    return { type: 'next_sehri', target: nextSehri, label: 'সেহরির শেষ হতে বাকি' };
+                    return { type: 'next_sehri', target: nextSehri, label: 'সেহরির সময় ' };
                 } else {
                     return { type: 'eid', target: null };
                 }
@@ -211,9 +268,6 @@ createApp({
 
         const toggleSchedule = () => {
             showSchedule.value = !showSchedule.value;
-            nextTick(() => {
-                if (window.lucide) lucide.createIcons();
-            });
         };
 
         return {
@@ -234,7 +288,9 @@ createApp({
             formatTime12,
             toBanglaNum,
             toBanglaTime,
-            computedState
+            computedState,
+            isDark,
+            toggleTheme
         };
     }
 }).mount('#app');

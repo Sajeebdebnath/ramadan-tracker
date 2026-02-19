@@ -1,6 +1,28 @@
 :root {
+    /* Light Mode (Default) */
+    --bg-app: #f4f4f5;       
+    --bg-card: #ffffff;      
+    --bg-input: #f4f4f5;
+    --bg-stat-card: #ffffff;     
+    
+    --primary: #10b981;      
+    --primary-hover: #059669;
+    --primary-dim: rgba(16, 185, 129, 0.1);
+    
+    --text-main: #18181b;
+    --text-muted: #71717a;
+    
+    --border: #e4e4e7;
+    --radius: 16px;
+    
+    --font-main: 'Hind Siliguri', sans-serif;
+}
+
+:root.dark {
+    /* Dark Mode */
     --bg-app: #09090b;       
-    --bg-card: #18181b;      
+    --bg-card: #18181b;
+    --bg-stat-card: #000000;           
     --bg-input: #27272a;     
     
     --primary: #10b981;      
@@ -11,9 +33,6 @@
     --text-muted: #a1a1aa;
     
     --border: #27272a;
-    --radius: 16px;
-    
-    --font-main: 'Hind Siliguri', sans-serif;
 }
 
 * {
@@ -100,7 +119,7 @@ body {
 }
 
 .stat-card {
-    background-color: #000000; /* Darker than card */
+    background-color: var(--bg-stat-card); /* Slightly darker/different than card */
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 1.5rem;
@@ -231,7 +250,7 @@ body {
 }
 
 .schedule-head {
-    background-color: #000;
+    background-color: var(--bg-card);
     font-weight: 600;
     color: var(--primary);
     position: sticky;
@@ -276,6 +295,27 @@ body {
     transition: color 0.2s;
 }
 
-.footer a:hover {
-    color: var(--primary);
+
+/* Hero Theme Toggle */
+.hero-theme-toggle {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 20;
 }
+
+.hero-theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+

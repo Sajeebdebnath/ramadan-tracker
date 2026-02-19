@@ -28,6 +28,9 @@
 
             <!-- Hero Banner: Green Card Top -->
             <div class="hero-banner">
+                <button @click="toggleTheme" class="hero-theme-toggle" :title="isDark ? 'লাইট মোড' : 'ডার্ক মোড'">
+                    <lucide-icon :name="isDark ? 'sun' : 'moon'" class="icon"></lucide-icon>
+                </button>
                 <div class="hero-title">রমজান মোবারক</div>
                 <div class="hero-location">(ঢাকা ও পার্শ্ববর্তী এলাকার জন্য)</div>
                 <div class="hero-date">{{ currentDateDisplay }}</div>
@@ -41,7 +44,7 @@
             <!-- Timer Card -->
             <div class="stat-card">
                 <div class="timer-label-small">
-                    <i data-lucide="timer" class="icon"></i>
+                    <lucide-icon name="timer" class="icon"></lucide-icon>
                     {{ statusText }}
                 </div>
                 <div class="timer-big">
@@ -60,7 +63,7 @@
             <!-- Dua Card -->
             <div class="dua-card">
                 <div class="dua-header">
-                    <i data-lucide="book-open" class="icon"></i>
+                    <lucide-icon name="book-open" class="icon"></lucide-icon>
                     {{ currentDuaTitle }}
                 </div>
                 <div class="dua-text">
@@ -73,8 +76,14 @@
 
             <!-- Schedule Toggle -->
             <button @click="toggleSchedule" class="action-btn" :class="{ active: showSchedule }">
-                <i data-lucide="calendar-days" class="icon"></i>
-                {{ showSchedule ? 'সময়সূচী লুকান' : 'সম্পূর্ণ সময়সূচী দেখুন' }}
+                <template v-if="!showSchedule">
+                    <lucide-icon name="calendar-days" class="icon"></lucide-icon>
+                    <span>সম্পূর্ণ সময়সূচী দেখুন</span>
+                </template>
+                <template v-else>
+                    <lucide-icon name="calendar-days" class="icon"></lucide-icon>
+                    <span>সময়সূচী লুকান</span>
+                </template>
             </button>
 
             <!-- Schedule List -->
